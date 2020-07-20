@@ -1,9 +1,6 @@
-const express = require('express');
-const useSocket = require('socket.io')
-
-const app = express();
+const app = require('express')();
 const server = require('http').Server(app);
-const io = useSocket(server);
+const io = require('socket.io')(server);
 
 const rooms = new Map();
 
@@ -15,7 +12,7 @@ app.get('/rooms', (req, res) => {
 
 
 io.on('connection', socket => {
-  console.log('user connect', socket)
+  console.log('user connect', socket.id)
 })
 
 
