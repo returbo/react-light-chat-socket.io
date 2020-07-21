@@ -1,8 +1,22 @@
-import React from 'react'
+import React from 'react';
 import socket from '../socket';
+import axios from 'axios';
 
 
 export default function JoinBlock() {
+  const [roomId, setRoomId] = React.useState('');
+  const [userName, setUserName] = React.useState('');
+
+  const onEnter = () => {
+    if (!roomId || !userName) {
+      return alert('Заполните поля ввода!')
+    }
+    axios.post('/rooms', {
+      roomId,
+      userName,
+    });
+  };
+
   return (
     <div className="wrapper">
       <div className="wrapper__block">
@@ -10,7 +24,12 @@ export default function JoinBlock() {
           <div className="input-group-prepend">
             <span className="input-group-text" id="addon-wrapping">Room ID</span>
           </div>
-          <input type="text" className="form-control"></input>
+          <input 
+            type="text" 
+            className="form-control" 
+            value={roomId}
+            onChange={(e) => setRoomId(e.target.value)}
+          ></input>
         </div>
       </div>
       <div className="wrapper__block">
@@ -18,10 +37,19 @@ export default function JoinBlock() {
           <div className="input-group-prepend">
             <span className="input-group-text" id="addon-wrapping">Your name</span>
           </div>
-          <input type="text" className="form-control"></input>
+          <input 
+            type="text" 
+            className="form-control" 
+            value={userName} 
+            onChange={(e) => setUserName(e.target.value)}
+          ></input>
         </div>
       </div>
-      <button type="button" className="btn btn-secondary btn-lg btn-block">ВОЙТИ</button>
+      <button 
+        type="button" 
+        className="btn btn-secondary btn-lg btn-block"
+        onClick={onEnter}
+      >ВОЙТИ</button>
     </div>
   )
 }
