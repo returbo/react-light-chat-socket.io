@@ -1,20 +1,23 @@
 import React from 'react';
-import socket from '../socket';
 import axios from 'axios';
 
 
-export default function JoinBlock() {
+export default function JoinBlock({ onLogin }) {
   const [roomId, setRoomId] = React.useState('');
   const [userName, setUserName] = React.useState('');
+  const [isLoading, setLoading] = React.useState(false)
 
-  const onEnter = () => {
+  const onEnter = async () => {
     if (!roomId || !userName) {
       return alert('Заполните поля ввода!')
     }
-    axios.post('/rooms', {
+    const obj = {
       roomId,
       userName,
-    });
+    }
+    setLoading(true);
+    await axios.post('/rooms', obj);
+    onLogin(obj);
   };
 
   return (
@@ -25,6 +28,7 @@ export default function JoinBlock() {
             <span className="input-group-text" id="addon-wrapping">Room ID</span>
           </div>
           <input 
+            maxLength={3}
             type="text" 
             className="form-control" 
             value={roomId}
@@ -38,6 +42,7 @@ export default function JoinBlock() {
             <span className="input-group-text" id="addon-wrapping">Your name</span>
           </div>
           <input 
+            maxLength={10}
             type="text" 
             className="form-control" 
             value={userName} 
@@ -46,10 +51,12 @@ export default function JoinBlock() {
         </div>
       </div>
       <button 
+        disabled={isLoading}
         type="button" 
         className="btn btn-secondary btn-lg btn-block"
         onClick={onEnter}
-      >ВОЙТИ</button>
+      >{isLoading ? 'ВХОД...' : 'ВОЙТИ'}
+      </button>
     </div>
   )
 }
